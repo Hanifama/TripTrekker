@@ -1,12 +1,16 @@
-export async function fetchData() {
-    const apiKey = 'bbf4c89ab60a06edaaa10148efbb86fc';
-    const url = `https://api.themoviedb.org/3/movie/550?api_key=${apiKey}`;
+export const fetchData = async () => {
+  const apiKey = 'bbf4c89ab60a06edaaa10148efbb86fc';
+  const url = `https://api.themoviedb.org/3/movie/550?api_key=${apiKey}`;
 
-   fetch(url + '?api_key=' + apiKey)
-  .then(response => response.json())
-  .then(data => {
+  try {
+    const response = await fetch(`${url}?api_key=${apiKey}`);
+    const data = await response.json();
+
     const appElement = document.getElementById('app');
     appElement.innerHTML = '';
+
+    const container = document.createElement('div');
+    container.classList.add('movie-container');
 
     data.results.forEach(movie => {
       const movieCard = document.createElement('div');
@@ -24,15 +28,10 @@ export async function fetchData() {
     });
 
     appElement.appendChild(container);
-  })
-  .catch(error => console.error('Error:', error));
-    try {
-      const response = await fetch(url);
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.error('Failed to fetch data:', error);
-      throw error;
-    }
+
+    return data;
+  } catch (error) {
+    console.error('Failed to fetch data:', error);
+    throw error;
   }
-  
+};
